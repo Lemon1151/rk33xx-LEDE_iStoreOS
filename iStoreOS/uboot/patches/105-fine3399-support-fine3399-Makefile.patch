@@ -1,0 +1,10 @@
+--- a/arch/arm/dts/Makefile	2023-11-27 13:48:02.937351973 +0800
++++ b/arch/arm/dts/Makefile	2024-06-04 16:48:39.925248312 +0800
+@@ -122,6 +122,7 @@
+ dtb-$(CONFIG_ROCKCHIP_RK3399) += \
+ 	rk3399-evb.dtb \
+ 	rk3399-ficus.dtb \
++	rk3399-fine3399.dtb \
+ 	rk3399-firefly.dtb \
+ 	rk3399-gru-bob.dtb \
+ 	rk3399-khadas-edge.dtb \
