@@ -61,23 +61,23 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
-    - name: Clone source code
+    - name: Clone source code [ ${{ inputs.source_branch }} ]
+      id: codes
       working-directory: /workdir
       run: |
-        run: |
-          # Set up compilation source code
-          if [[ "${{ inputs.source_branch }}" == *"lede"* ]]; then
-              REPO_URL="https://github.com/coolsnowwolf/lede"
-              REPO_BRANCH="master"
-              TAGS_NAME="lede"
-          elif [[ "${{ inputs.source_branch }}" == *"istoreos"* ]]; then
-              REPO_URL="https://github.com/istoreos/istoreos"
-              REPO_BRANCH="istoreos-22.03"
-              TAGS_NAME="istoreos"
-          else
-              echo "Unknown source code repository."
-              exit 1
-          fi
+        # Set up compilation source code
+        if [[ "${{ inputs.source_branch }}" == *"lede"* ]]; then
+            REPO_URL="https://github.com/coolsnowwolf/lede"
+            REPO_BRANCH="master"
+            TAGS_NAME="lede"
+        elif [[ "${{ inputs.source_branch }}" == *"istoreos"* ]]; then
+            REPO_URL="https://github.com/istoreos/istoreos"
+            REPO_BRANCH="istoreos-22.03"
+            TAGS_NAME="istoreos"
+        else
+            echo "Unknown source code repository."
+            exit 1
+        fi
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
