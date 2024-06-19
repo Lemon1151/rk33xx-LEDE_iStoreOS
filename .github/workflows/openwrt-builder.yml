@@ -15,18 +15,29 @@ name: OpenWrt Builder
 on:
   repository_dispatch:
   workflow_dispatch:
-
+    inputs:
+      source_branch:
+        description: "Select the source branch"
+        required: false
+        default: "lede-master"
+        type: choice
+        options:
+          - lede-master
+          - istoreos-main
+      openwrt_board:
+        description: "Select device board"
+        required: false
+        default: "fine3399"
+        type: choice
+        options:
+          - fine3399
+          - tpm312
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
-  FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: .config
-  DIY_P1_SH: diy-part1.sh
-  DIY_P2_SH: diy-part2.sh
-  UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
-  UPLOAD_RELEASE: true
-  TZ: Asia/Shanghai
+  FEEDS_CONF: config/${{ inputs.source_branch }}/feeds.conf.default
+  CONFIG_FILE: config/${{ inputs.source_branch }}/config
+  DIY_P1_SH: config/${{ inputs.source_branch }}/diy-part1.sh
+  DIY_P2_SH: config/${{ inputs.source_branch }}/diy-part2.sh
+  TZ: America/New_York
 
 jobs:
   build:
@@ -53,6 +64,24 @@ jobs:
     - name: Clone source code
       working-directory: /workdir
       run: |
+        run: |
+          # Set up compilation source code
+          if [[ "${{ inputs.source_branch }}" == *"openwrt"* ]]; then
+              REPO_URL="https://github.com/openwrt/openwrt"
+              REPO_BRANCH="main"
+              TAGS_NAME="official"
+          elif [[ "${{ inputs.source_branch }}" == *"lede"* ]]; then
+              REPO_URL="https://github.com/coolsnowwolf/lede"
+              REPO_BRANCH="master"
+              TAGS_NAME="lede"
+          elif [[ "${{ inputs.source_branch }}" == *"immortalwrt"* ]]; then
+              REPO_URL="https://github.com/immortalwrt/immortalwrt"
+              REPO_BRANCH="master"
+              TAGS_NAME="immortalwrt"
+          else
+              echo "Unknown source code repository."
+              exit 1
+          fi
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
