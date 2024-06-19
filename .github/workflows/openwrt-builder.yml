@@ -23,7 +23,7 @@ on:
         type: choice
         options:
           - lede-master
-          - istoreos-main
+          - istoreos-22.03
       openwrt_board:
         description: "Select device board"
         required: false
@@ -33,10 +33,10 @@ on:
           - fine3399
           - tpm312
 env:
-  FEEDS_CONF: config/${{ inputs.source_branch }}/feeds.conf.default
-  CONFIG_FILE: config/${{ inputs.source_branch }}/config
-  DIY_P1_SH: config/${{ inputs.source_branch }}/diy-part1.sh
-  DIY_P2_SH: config/${{ inputs.source_branch }}/diy-part2.sh
+  FEEDS_CONF: ${{ inputs.source_branch }}/feeds.conf.default
+  CONFIG_FILE: ${{ inputs.source_branch }}/config
+  DIY_P1_SH: ${{ inputs.source_branch }}/diy-part1.sh
+  DIY_P2_SH: ${{ inputs.source_branch }}/diy-part2.sh
   TZ: America/New_York
 
 jobs:
