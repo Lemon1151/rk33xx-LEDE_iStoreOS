@@ -83,12 +83,12 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Load custom feeds
-        run: |
+      run: |
           [ -e "$FEEDS_CONF" ] && mv "$FEEDS_CONF" openwrt/feeds.conf.default  
           chmod +x "$GITHUB_WORKSPACE/$DIY_P1_SH"  
           cd openwrt  
           ./"$DIY_P1_SH"  
-         env:  
+      env:  
           FEEDS_CONF: ${{ env.FEEDS_CONF }}  
           DIY_P1_SH: ${{ env.DIY_P1_SH }} 
 
